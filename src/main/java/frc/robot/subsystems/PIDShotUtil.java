@@ -57,6 +57,7 @@ public class PIDShotUtil extends SubsystemBase {
 
   public void setSetpoint(double setpoint) {
       this.setpoint = setpoint;
+      this.bangBangController.setSetpoint(setpoint);
   }
 
   public boolean isEnabled() {
@@ -76,6 +77,7 @@ public class PIDShotUtil extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putBoolean("PID Subsystem Enabled", isEnabled());
     SmartDashboard.putNumber("PID Setpoint", getSetpoint());
+    SmartDashboard.putNumber("PID RPM", flywheelEncoder.getVelocity());
 
     if (isEnabled()) {
       flywheelMotor.set(bangBangController.calculate(flywheelEncoder.getVelocity()));
