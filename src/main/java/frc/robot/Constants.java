@@ -17,8 +17,8 @@ package frc.robot;
 public final class Constants {
 
   // PID Values
-  public static final double Shot_PID_P_Value = 0.0; // Proportional gain
-  public static final double Shot_PID_I_Value = 0.0; // Integral gain
+  public static final double Shot_PID_P_Value = 0.00027; // Proportional gain
+  public static final double Shot_PID_I_Value = 0.0006022304833; // Integral gain
   public static final double Shot_PID_D_Value = 0.0; // Derivative gain
 
   // PIDShotUtil subsystem values
