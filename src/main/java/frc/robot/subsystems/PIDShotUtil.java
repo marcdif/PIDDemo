@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants;
 
 public class PIDShotUtil extends PIDSubsystem {
-  private CANSparkMax flywheelMotor;
+  private CANSparkMax flywheelMotor, secondMotor;
   private RelativeEncoder flywheelEncoder;
 
   /** Creates a new PIDShotUtil. */
@@ -34,6 +34,8 @@ public class PIDShotUtil extends PIDSubsystem {
 
     // TODO - Ensure the Constants.shotMotorCANID matches your shot motor's CAN ID!
     flywheelMotor = new CANSparkMax(Constants.shotMotorCANID, MotorType.kBrushless);
+    secondMotor = new CANSparkMax(Constants.shotMotorCANID_2, MotorType.kBrushless);
+    secondMotor.follow(flywheelMotor, true);
 
     // Brake vs Coast idle modes determine how the motor spins down when it's
     // powered off. Brake mode applies a "brake" force which spins down quicker,
@@ -43,6 +45,7 @@ public class PIDShotUtil extends PIDSubsystem {
     // behavior with Coast as your idle mode. This ensures the behavior of the motor
     // is entirely managed by the PID Controller and gravity/friction.
     flywheelMotor.setIdleMode(IdleMode.kCoast);
+    secondMotor.setIdleMode(IdleMode.kCoast);
 
     // Instantiate your Spark Max's built-in encoder.
     flywheelEncoder = flywheelMotor.getEncoder();

@@ -22,7 +22,8 @@ public final class Constants {
   public static final double Shot_PID_D_Value = 0.0; // Derivative gain
 
   // PIDShotUtil subsystem values
-  public static final int shotMotorCANID = 2;
+  public static final int shotMotorCANID = 6;
+  public static final int shotMotorCANID_2 = 7;
 
   // Shot RPM values
   public static final int shotLowRPM = 1000;
