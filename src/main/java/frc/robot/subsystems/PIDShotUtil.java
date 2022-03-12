@@ -5,27 +5,25 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class PIDShotUtil extends PIDSubsystem {
+public class PIDShotUtil extends SubsystemBase {
   private CANSparkMax flywheelMotor, secondMotor;
   private RelativeEncoder flywheelEncoder;
 
+  private BangBangController bangBangController;
+  private double setpoint = 0;
+  private boolean enabled = false;
+
   /** Creates a new PIDShotUtil. */
   public PIDShotUtil() {
-    super(
-        // The PIDController used by the subsystem
-
-        // TODO - Update your P/I/D constants values in the Constants class!
-        new PIDController(Constants.Shot_PID_P_Value, Constants.Shot_PID_I_Value, Constants.Shot_PID_D_Value));
 
     // Instantiate your Spark Max motor controller.
     // You can use any motor controller!
@@ -50,37 +48,37 @@ public class PIDShotUtil extends PIDSubsystem {
     // Instantiate your Spark Max's built-in encoder.
     flywheelEncoder = flywheelMotor.getEncoder();
 
-    // Initialize your PID Controller's setpoint to 0.
-    // This isn't entirely necessary, but is good practice.
-    setSetpoint(0);
+    bangBangController = new BangBangController(50);
   }
 
-  @Override
-  public void useOutput(double output, double setpoint) {
-    // Ensure the output value from the PID Controller is between -1 to 1.
-    // You can't set a motor higher than 1.0/lower than -1.0.
-    output = MathUtil.clamp(output, -1.0, 1.0);
-
-    // Set your motor speed to the PID Controller's output value.
-    flywheelMotor.set(output);
+  public double getSetpoint() {
+      return setpoint;
   }
 
-  @Override
-  public double getMeasurement() {
-    // Return the process variable measurement here
+  public void setSetpoint(double setpoint) {
+      this.setpoint = setpoint;
+  }
 
-    // Return your encoder's velocity measurement.
-    // On Spark Max motor controllers, this is the motor's RPM.
-    return flywheelEncoder.getVelocity();
+  public boolean isEnabled() {
+      return enabled;
+  }
+
+  public void enable() {
+      this.enabled = true;
+  }
+
+  public void disable() {
+      this.enabled = false;
+      flywheelMotor.set(0);
   }
 
   @Override
   public void periodic() {
-    // super.periodic() MUST remain in this method!
-    // This is how the PIDSubsystem parent class does PID calculations!
-    super.periodic();
-
     SmartDashboard.putBoolean("PID Subsystem Enabled", isEnabled());
     SmartDashboard.putNumber("PID Setpoint", getSetpoint());
+
+    if (isEnabled()) {
+      flywheelMotor.set(bangBangController.calculate(flywheelEncoder.getVelocity()));
+    }
   }
 }
