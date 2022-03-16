@@ -50,6 +50,7 @@ public class PIDShotUtil extends PIDSubsystem {
     // Initialize your PID Controller's setpoint to 0.
     // This isn't entirely necessary, but is good practice.
     setSetpoint(0);
+    getController().setTolerance(Constants.Shot_PID_POS_TOLERANCE, Constants.Shot_PID_VEL_TOLERANCE);
   }
 
   @Override

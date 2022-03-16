@@ -21,6 +21,9 @@ public final class Constants {
   public static final double Shot_PID_I_Value = 0.0; // Integral gain
   public static final double Shot_PID_D_Value = 0.0; // Derivative gain
 
+  public static final double Shot_PID_POS_TOLERANCE = 100; // Position tolerance - see guide for more info
+  public static final double Shot_PID_VEL_TOLERANCE = 20 / 0.02; // Velocity tolerance - see guide for more info
+
   // PIDShotUtil subsystem values
   public static final int shotMotorCANID = 2;
 
